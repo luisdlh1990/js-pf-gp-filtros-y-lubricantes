@@ -1,0 +1,26 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+h1{
+    text-align: center;
+}
+.contenedor{
+    padding: 50px;
+    margin: 10px;
+}
+.boton{
+    margin: 5px;
+    border-radius: 3px;
+    text-transform: capitalize;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.banner{
+    background-image: url(img/filtrosylubricantes.png);
+    height: 300px;
+    background-color: black;
+    background-repeat: no-repeat;
+}
+td{
+    border-bottom: 1px solid black;
+}
