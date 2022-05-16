@@ -18,9 +18,9 @@ function loadData(datos){
     datos.forEach((data,index) => {
         const lista = document.createElement('tr');
         lista.innerHTML = ` 
-            <td>${data.Articulo}</td>
+            <td>${data.Articulo}: </td>
             <td>${data.Descripción}</td>
-            <td>${data.Precio}</td>
+            <td>$${data.Precio}</td>
             <button id="btn_${index}" data-precio='${data.Precio}' data-name='${data.Articulo}' class="boton agrear_carro">Agregar al Carrito</button>`;
         listaProductos.appendChild(lista);
     });
@@ -39,14 +39,14 @@ function pagar(){
         buttonsStyling: false
     })
     swalWithBootstrapButtons2.fire({
-        title: `Desea pagar ${monto}`,
+        title: `${monto}`,
         text: "You won't be able to revert this!",
         showCancelButton: true,
         confirmButtonText: 'Comprar',
         cancelButtonText: 'Cancelar',
         reverseButtons: true,
         html:
-        `<form>
+        `<form class="form-order">
         <div class="row">
             <div class="form-group col-6">
                 <label for="first-name">First Name</label>
@@ -57,40 +57,27 @@ function pagar(){
                 <input type="text" class="form-control" placeholder="Last Name" id="last-name">
             </div>
         </div>
-        <label for="username">Username</label>
+        <label for="email">Email</label>
         <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">@</span>
-            </div>
-            <input type="text" class="form-control" placeholder="Username">
+            <input type="text" class="form-control" placeholder="Email Address" id="secondary-email">
         </div>
         <br>
         <label for="address">Address</label>
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Address" id="address">
         </div>
-        <label for="secondary-email">Email address(optional)</label>
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Email Address" id="secondary-email">
-        </div>
         <div class="row">
             <div class="col-4">
                 <label for="country">Country</label>
                 <div class="input-group">
-                    <select class="custom-select">
-                        <option value="" selected disabled hidden>Choose..</option>
-                        <option value=Vietnam>Vietnam</option>
-                    </select>
+                <input type="text" class="form-control" placeholder="Country" id="Country">
                 </div>
 
             </div>
             <div class="col-4">
                 <label for="state">State</label>
                 <div class="input-group">
-                    <select class="custom-select">
-                        <option value="" selected disabled hidden>Choose..</option>
-                        <option value=HCM>HCM</option>
-                    </select>
+                <input type="text" class="form-control" placeholder="State" id="State">
                 </div>
             </div>
             <div class="col-4">
@@ -180,7 +167,7 @@ function addOrder(e){
                 price:_this.getAttribute('data-precio')
             }
             const lista = document.createElement('tr');
-            lista.innerHTML = `<td>${objData.name}</td> <td>${objData.price}</td> `
+            lista.innerHTML = `<td>${objData.name}</td> <td>${objData.price}</td> `;
             listaCompra.appendChild(lista);
             calcularPrecio()
             window.scroll(0,document.body.scrollHeight)
