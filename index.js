@@ -128,7 +128,7 @@ function pagar(){
         if (result.isConfirmed) {
             return swalWithBootstrapButtons2.fire(
             'Compra realizada con exito!',
-            'Le enviaremos el informe de su pedido /n Gracias!',
+            'Le enviaremos el informe de su pedido Gracias!',
             'success'
             )
         } 
