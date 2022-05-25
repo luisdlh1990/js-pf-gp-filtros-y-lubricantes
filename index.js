@@ -1,9 +1,7 @@
-const listaProductos = document.getElementById('contenedor');
-const listaCompra = document.getElementById('listaCarrito');
 
 function traerDatos() {
     try{
-        fetch('./productos.json')
+        fetch('https://mustang-tesito.herokuapp.com/api/lubri.json')
         .then(respuesta => respuesta.json())
         .then(datos =>{
             loadData(datos)
@@ -13,7 +11,6 @@ function traerDatos() {
         console.log({e})
     }
 }
-traerDatos();
 function loadData(datos){
     datos.forEach((data,index) => {
         const lista = document.createElement('tr');
@@ -21,20 +18,25 @@ function loadData(datos){
             <td>${data.Articulo}: </td>
             <td>${data.Descripción}</td>
             <td>$${data.Precio}</td>
-            <button id="btn_${index}" data-precio='${data.Precio}' data-name='${data.Articulo}' class="boton agrear_carro">Agregar al Carrito</button>`;
+            <button id="btn_${index}" data-precio='${data.Precio}' data-name='${data.Articulo}' class="boton agrear_carro" onclick="addOrder(this)">Agregar al Carrito</button>`;
         listaProductos.appendChild(lista);
     });
 }
 
-document.getElementById("pagar").addEventListener('click',pagar);
+function vaciar(){
+    document.getElementById('listaCarrito').innerHTML=``
+    calcularPrecio()
+}
+
+
 function pagar(){
     const monto=document.getElementById('total').innerHTML.trim()
-    if(monto == '0$')
+    if(monto == 'Total a pagar: $0')
         return 
     const swalWithBootstrapButtons2 = Swal.mixin({
         customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
         },
         buttonsStyling: false
     })
@@ -126,8 +128,8 @@ function pagar(){
         if (result.isConfirmed) {
             return swalWithBootstrapButtons2.fire(
             'Compra realizada con exito!',
-            'Le enviaremos el informe de su pedido',
-            'Gracias!',
+            'Le enviaremos el informe de su pedido /n Gracias!',
+            'success'
             )
         } 
         swalWithBootstrapButtons2.fire(
@@ -137,12 +139,7 @@ function pagar(){
         )
     })
 }
-window.addEventListener('DOMContentLoaded', (event) => {
-    document.querySelectorAll(".agrear_carro").forEach(el => {
-        const ide=el.getAttribute("id")
-        el.addEventListener('click',addOrder);
-    });
-});
+
 function addOrder(e){
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
@@ -161,7 +158,7 @@ function addOrder(e){
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            const _this=e.path[0]
+            const _this=e
             const objData={
                 name:_this.getAttribute('data-name'),
                 price:_this.getAttribute('data-precio')
@@ -171,29 +168,28 @@ function addOrder(e){
             listaCompra.appendChild(lista);
             calcularPrecio()
             window.scroll(0,document.body.scrollHeight)
-            swalWithBootstrapButtons.fire(
-                'Agregado!',
-            )
-        } else if (
-          /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-        ) {
-        swalWithBootstrapButtons.fire(
-            'Compra cancelada',
-        
-        )
+            swalWithBootstrapButtons.fire( 'Agregado!')
+        } else if (  result.dismiss === Swal.DismissReason.cancel  ) {
+            swalWithBootstrapButtons.fire( 'Compra cancelada' )
         }
     })
 }
 function calcularPrecio(){
     let suma = 0
     const idCarrito= document.getElementById('listaCarrito')
-    if(!idCarrito || !idCarrito.rows )
-        console.log("no hay nada en el carrito")
-    for (var i = 0, row; row = idCarrito.rows[i]; i++) {
-        const price=row.cells[1].innerHTML.replace(",","")
-        suma+=parseFloat(price)
+    if(idCarrito && idCarrito.rows ){
+        for (var i = 0, row; row = idCarrito.rows[i]; i++) {
+            const price=row.cells[1].innerHTML.replace(",","")
+            suma+=parseFloat(price)
+        }
     }
     document.getElementById('total').innerHTML=`Total a pagar: $${suma.toFixed()}`
 }
+
+const listaProductos = document.getElementById('contenedor');
+const listaCompra = document.getElementById('listaCarrito');
+traerDatos();
+document.getElementById("pagar").addEventListener('click',pagar);
+document.getElementById("vaciar").addEventListener('click',vaciar);
+
 
